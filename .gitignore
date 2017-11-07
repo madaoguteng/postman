@@ -1,0 +1,15 @@
+/target/
+.project
+.classpath
+.settings
+/.settings/
+/src/main/webapp/WEB-INF/classes
+/src/main/webapp/WEB-INF/lib
+*.class
+Thumbs.db
+.idea
+/.idea/
+*.iml
+/src/main/webapp/business-common/html
+/node_modules/
+/yarn.lock
