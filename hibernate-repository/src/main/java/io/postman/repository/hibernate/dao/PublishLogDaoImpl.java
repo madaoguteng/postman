@@ -32,14 +32,13 @@ public class PublishLogDaoImpl extends CommonDaoImpl<PublishLogPO> implements Pu
     public void updateStatus(String logId, StatusInfoSnapshot status) {
         if (StringUtil.isEmptyOrNull(logId) || status == null)
             throw new RepositoryException("error no updateStatus, params is null");
-        /*String hql = "update PublishLogPO p set p.status='"+status.status().toString()
-                + "', p.="*/
-        CriteriaBuilder crb=getSession().getCriteriaBuilder();
-        CriteriaQuery<PublishLogPO> crq=crb.createQuery(PublishLogPO.class);
-        Root<PublishLogPO> root=crq.from(PublishLogPO.class);
-        crq.select(root);
-        //crq.where(crb.like(root.get("address"),address));
-        //return currentSession().createQuery(crq).getResultList();
+        String hql = "update PublishLogPO p set p.status=:status, "
+                + "p.updateTime=:updateTime, p.publishNumber =:publishNumber";
+        if (! StringUtil.isEmptyOrNull(status.errorMsg())){
+            hql += ",p.errorMsg = :errorMsg";
+        }
+        hql += " where p.logId=:logId";
+        //getSession().
     }
 
     @Override
