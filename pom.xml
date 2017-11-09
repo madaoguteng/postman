@@ -63,6 +63,7 @@
     <modules>
         <module>postman-common</module>
         <module>postman-integration</module>
+        <module>hibernate-repository</module>
     </modules>
     <build>
         <plugins>

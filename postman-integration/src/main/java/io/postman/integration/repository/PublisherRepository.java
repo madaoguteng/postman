@@ -2,22 +2,24 @@ package io.postman.integration.repository;
 
 import io.postman.common.util.Page;
 
+import java.io.Serializable;
+
 /**
  * Created by caojun on 2017/11/7.
  */
 public interface PublisherRepository {
 
-    int save(PublishLogSnapshot log);
+    Serializable save(PublishLogSnapshot log);
 
-    int updateStatus(String logId, StatusInfoSnapshot status);
+    void updateStatus(String logId, StatusInfoSnapshot status);
 
-    int delete(String logId);
+    void delete(String logId);
     /**
      * 归档指定天数之前已发送的日志
      * @param day
      * @return
      */
-    int archivedBeforeDay(int day);
+    void archivedBeforeDay(int day);
 
     PublishLogSnapshot publishLog(String logId);
     /**
