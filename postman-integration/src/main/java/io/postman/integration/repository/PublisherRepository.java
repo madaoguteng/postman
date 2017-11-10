@@ -1,8 +1,7 @@
 package io.postman.integration.repository;
 
-import io.postman.common.util.Page;
-
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by caojun on 2017/11/7.
@@ -24,8 +23,7 @@ public interface PublisherRepository {
     PublishLogSnapshot publishLog(String logId);
     /**
      * 分页查询发送失败的日志
-     * @param page
      * @return
      */
-    Page<PublishLogSnapshot> listOfFail(Page page);
+    List<PublishLogSnapshot> listOfFail(Integer pageSize, Integer pageNo);
 }

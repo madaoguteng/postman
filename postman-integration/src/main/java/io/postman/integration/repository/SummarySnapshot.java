@@ -26,17 +26,12 @@ public class SummarySnapshot {
      * 发布者(事件归属业务标识)
      */
     private String publisher;
-    /**
-     * 返回消息的消息名称
-     */
-    private String returnEventName;
 
-    public SummarySnapshot(String eventName, Date publishTime, Integer publishMaxNumber, String publisher, String returnEventName) {
+    public SummarySnapshot(String eventName, Date publishTime, Integer publishMaxNumber, String publisher) {
         this.eventName = eventName;
         this.publishTime = publishTime;
         this.publishMaxNumber = publishMaxNumber;
         this.publisher = publisher;
-        this.returnEventName = returnEventName;
     }
 
     public SummarySnapshot(Summary summary){
@@ -46,11 +41,10 @@ public class SummarySnapshot {
         this.publishTime = summary.publishTime();
         this.publishMaxNumber = summary.publishMaxNumber();
         this.publisher = summary.publisher();
-        this.returnEventName = summary.returnEventName();
     }
 
     public Summary transTo(){
-        return new Summary(this.eventName, this.publishTime, this.publishMaxNumber, this.publisher, this.returnEventName);
+        return new Summary(this.eventName, this.publishTime, this.publishMaxNumber, this.publisher);
     }
     public String eventName() {
         return eventName;
@@ -68,8 +62,5 @@ public class SummarySnapshot {
         return publisher;
     }
 
-    public String returnEventName() {
-        return returnEventName;
-    }
 }
 

@@ -6,20 +6,26 @@ import java.util.Date;
  * Created by caojun on 2017/11/7.
  * Domain model of publish event log, it is an aggregates root.
  */
-public class PublishLog<T> {
+public class PublishLog {
     private PublishLogId logId;
     private Summary summary;
     private StatusInfo status;
     /**
      * 事件内容
      */
-    private T eventContent;
+    private Object eventContent;
 
     public PublishLog(String eventName, Date publishTime, Integer publishMaxNumber, String publisher,
-                      String returnEventName, T eventContent) {
+                      Object eventContent) {
         this.logId = new PublishLogId();
-        this.summary = new Summary(eventName, publishTime, publishMaxNumber, publisher, returnEventName);
+        this.summary = new Summary(eventName, publishTime, publishMaxNumber, publisher);
         this.eventContent = eventContent;
+        this.status = StatusInfo.initStatusInfo();
+    }
+
+    public PublishLog(String eventName, Date publishTime, Integer publishMaxNumber, String publisher) {
+        this.logId = new PublishLogId();
+        this.summary = new Summary(eventName, publishTime, publishMaxNumber, publisher);
         this.status = StatusInfo.initStatusInfo();
     }
 
@@ -53,7 +59,11 @@ public class PublishLog<T> {
         return status;
     }
 
-    public T eventContent() {
+    public Object eventContent() {
         return eventContent;
+    }
+
+    public void setEventContent(Object eventContent) {
+        this.eventContent = eventContent;
     }
 }

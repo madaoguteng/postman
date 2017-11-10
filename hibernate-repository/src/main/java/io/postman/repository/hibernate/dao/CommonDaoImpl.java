@@ -57,7 +57,6 @@ public class CommonDaoImpl<T> implements CommonDao {
         return getSession().get(entityClass, id);
     }
 
-
     @Override
     public int executeHQL(String hql) {
         if (StringUtil.isEmptyOrNull(hql))

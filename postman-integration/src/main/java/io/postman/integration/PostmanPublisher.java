@@ -13,9 +13,8 @@ public interface PostmanPublisher {
      * @param publisher
      * @param publishMaxNumber
      * @param returnEventName 消费后返回的消息名称
-     * @param <T>
      */
-    <T> void publish(String eventName, T content, String publisher, Integer publishMaxNumber, String returnEventName);
+    void publish(String eventName, Object content, String publisher, Integer publishMaxNumber, String returnEventName);
 
     /**
      * 重新发送消息

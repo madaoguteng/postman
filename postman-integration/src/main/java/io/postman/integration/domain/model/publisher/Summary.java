@@ -26,18 +26,13 @@ public class Summary {
      * 发布者(事件归属业务标识)
      */
     private String publisher;
-    /**
-     * 返回消息的消息名称
-     */
-    private String returnEventName;
 
-    public Summary(String eventName, Date publishTime, Integer publishMaxNumber, String publisher, String returnEventName) {
+    public Summary(String eventName, Date publishTime, Integer publishMaxNumber, String publisher) {
         if (StringUtil.isEmptyOrNull(eventName)) throw new EventComponentException("eventName is null !");
         this.eventName = eventName;
         this.publishTime = publishTime != null ? publishTime : new Date();
         this.publishMaxNumber = publishMaxNumber != null ? publishMaxNumber : 3;
         this.publisher = publisher;
-        this.returnEventName = returnEventName;
     }
 
     public String eventName() {
@@ -56,8 +51,5 @@ public class Summary {
         return publisher;
     }
 
-    public String returnEventName() {
-        return returnEventName;
-    }
 }
 

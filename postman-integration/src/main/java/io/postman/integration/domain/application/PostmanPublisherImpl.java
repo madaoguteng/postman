@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * Created by caojun on 2017/11/8.
  * a implements of interface PostmanPublisher
@@ -40,31 +42,32 @@ public class PostmanPublisherImpl implements PostmanPublisher {
      * @param publisher
      * @param publishMaxNumber
      * @param returnEventName 消费后返回的消息名称
-     * @param <T>
      */
     @Override
     @Transactional
-    public <T> void publish(String eventName, T content, String publisher, Integer publishMaxNumber, String returnEventName) {
-        PublishLog log = new PublishLog(eventName, null, publishMaxNumber, publisher, returnEventName, content);
+    public void publish(String eventName, Object content, String publisher, Integer publishMaxNumber, String returnEventName) {
+        PublishLog log = new PublishLog(eventName, null, publishMaxNumber, publisher);
+        //将数据序列化成待发送的消息体
+        String eventContext = eventSerialize.serialize(log.logId().id(), publisher, log.summary().publishTime(),
+                content, returnEventName);
+        log.setEventContent(eventContext);
         PublishLogSnapshot snapshot = new PublishLogSnapshot(log);
+
         //持久化事件发布日志
-        if (publisherRepository.save(snapshot)>0){
-            String eventContext = eventSerialize.serialize(snapshot);
-            this.publisher.sendNIO(eventName, null, eventContext,
-                    (String metadata, Exception exception) -> {
-                        if (exception == null)
-                            log.publishedStatus();
-                        else {
-                            log.failStatus(exception.getMessage());
-                            LoggerUtil.error(logger, "error when publish event by nio，eventName={}, logId={}, metadata={}, message：{}",
-                                    eventName, snapshot.logId(), metadata, LoggerUtil.getStackInfo(exception));
-                        }
-                        publisherRepository.updateStatus(snapshot.logId(), new StatusInfoSnapshot(log.status()));
+        publisherRepository.save(snapshot);
+        this.publisher.sendNIO(eventName, null, eventContext,
+                (String metadata, Exception exception) -> {
+                    if (exception == null)
+                        log.publishedStatus();
+                    else {
+                        log.failStatus(exception.getMessage());
+                        LoggerUtil.error(logger, "error when publish event by nio，eventName={}, logId={}, metadata={}, message：{}",
+                                eventName, snapshot.logId(), metadata, LoggerUtil.getStackInfo(exception));
                     }
-            );
-        }else{
-            throw new EventComponentException("fail on saving event publish log");
-        }
+                    publisherRepository.updateStatus(snapshot.logId(), new StatusInfoSnapshot(log.status()));
+                }
+        );
+
     }
 
     @Transactional
@@ -76,7 +79,7 @@ public class PostmanPublisherImpl implements PostmanPublisher {
         if (snapshot != null)
             throw new EventComponentException("publishLog not exists");
         PublishLog log = snapshot.transTo();
-        sendBIO(log, eventSerialize.serialize(snapshot));
+        sendBIO(log, (String)log.eventContent());
         return PublishStatus.PUBLISHED.equals(log.status().status());
     }
 
@@ -96,11 +99,10 @@ public class PostmanPublisherImpl implements PostmanPublisher {
      * 轮训重试发布事件
      */
     public void rotationRetryPublish(){
-        Page<PublishLogSnapshot> page = new Page(100);
-        page = publisherRepository.listOfFail(page);
-        if (page.getTotalCount() == 0 || page.getResult() == null) return;
-        page.getResult().forEach(snapshot -> {
-            sendBIO(snapshot.transTo(), eventSerialize.serialize(snapshot));
+        List<PublishLogSnapshot> logs = publisherRepository.listOfFail(1, 20);
+        if (logs == null || logs.size() == 0) return;
+        logs.forEach(snapshot -> {
+            sendBIO(snapshot.transTo(), (String)snapshot.eventContent());
         });
     }
 }

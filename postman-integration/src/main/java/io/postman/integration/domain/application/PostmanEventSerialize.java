@@ -2,8 +2,8 @@ package io.postman.integration.domain.application;
 
 import com.alibaba.fastjson.JSON;
 import io.postman.common.exception.EventComponentException;
+import io.postman.common.util.StringUtil;
 import io.postman.integration.EventSerialize;
-import io.postman.integration.repository.PublishLogSnapshot;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -14,11 +14,12 @@ import java.util.Date;
 @Service("eventSerialize")
 public class PostmanEventSerialize implements EventSerialize {
     @Override
-    public String serialize(PublishLogSnapshot publishLog) {
-        if (publishLog == null || publishLog.summary() == null)
-            throw new EventComponentException("publishLog or summary is null");
-        EventContextDTO event = new EventContextDTO(publishLog.logId(), publishLog.summary().publisher(),
-                publishLog.summary().publishTime(), publishLog.eventContent(), publishLog.summary().returnEventName());
+    public String serialize(String logId, String publisher, Date publishTime,
+                            Object eventContent, String returnEventName) {
+        if (StringUtil.isEmptyOrNull(logId))
+            throw new EventComponentException("logId is null");
+        EventContextDTO event = new EventContextDTO(logId, publisher,
+                publishTime, eventContent, returnEventName);
         return JSON.toJSONString(event);
     }
 

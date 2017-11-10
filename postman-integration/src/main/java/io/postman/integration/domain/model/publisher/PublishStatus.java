@@ -11,4 +11,5 @@ public enum PublishStatus {
     PUBLISHED, // 已发布
     FAIL // 发布失败
     ;
+
 }

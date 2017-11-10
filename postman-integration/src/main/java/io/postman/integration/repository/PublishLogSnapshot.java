@@ -27,6 +27,13 @@ public class PublishLogSnapshot<T> {
         this.eventContent = publishLog.eventContent();
     }
 
+    public PublishLogSnapshot(String logId, SummarySnapshot summary, StatusInfoSnapshot status, T eventContent){
+        this.logId = logId;
+        this.summary = summary;
+        this.status = status;
+        this.eventContent = eventContent;
+    }
+
     public PublishLog transTo(){
         return new PublishLog(this.logId,
                 this.summary!=null ? this.summary.transTo():null,
