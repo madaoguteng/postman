@@ -14,9 +14,9 @@ public class PublishLogSnapshot<T> {
     /**
      * 事件内容
      */
-    private T eventContent;
+    private Object eventContent;
 
-    public PublishLogSnapshot(PublishLog<T> publishLog){
+    public PublishLogSnapshot(PublishLog publishLog){
         if (publishLog == null)
             throw new EventComponentException("error when create PublishLogSnapshot, publishLog is null");
         this.logId = publishLog.logId().id();
@@ -64,7 +64,7 @@ public class PublishLogSnapshot<T> {
         this.status = status;
     }
 
-    public T eventContent() {
+    public Object eventContent() {
         return eventContent;
     }
 
