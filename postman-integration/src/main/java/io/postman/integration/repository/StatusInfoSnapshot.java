@@ -60,5 +60,15 @@ public class StatusInfoSnapshot {
     public String errorMsg() {
         return errorMsg;
     }
+
+    @Override
+    public String toString() {
+        return "StatusInfoSnapshot{" +
+                "status=" + status +
+                ", updateTime=" + updateTime +
+                ", publishNumber=" + publishNumber +
+                ", errorMsg='" + errorMsg + '\'' +
+                '}';
+    }
 }
 

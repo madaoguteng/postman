@@ -23,6 +23,19 @@ public class PublishLog {
         this.status = StatusInfo.initStatusInfo();
     }
 
+    public PublishLog(String eventName, String publisher, Object eventContent) {
+        this.logId = new PublishLogId();
+        this.summary = new Summary(eventName, null, null, publisher);
+        this.eventContent = eventContent;
+        this.status = StatusInfo.initStatusInfo();
+    }
+
+    public PublishLog(String eventName, String publisher) {
+        this.logId = new PublishLogId();
+        this.summary = new Summary(eventName, null, null, publisher);
+        this.status = StatusInfo.initStatusInfo();
+    }
+
     public PublishLog(String eventName, Date publishTime, Integer publishMaxNumber, String publisher) {
         this.logId = new PublishLogId();
         this.summary = new Summary(eventName, publishTime, publishMaxNumber, publisher);

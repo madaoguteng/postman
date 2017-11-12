@@ -7,7 +7,7 @@ import io.postman.integration.domain.model.publisher.PublishLog;
  * Created by caojun on 2017/11/7.
  * Domain model of publish event log, it is an aggregates root.
  */
-public class PublishLogSnapshot<T> {
+public class PublishLogSnapshot {
     private String logId;
     private SummarySnapshot summary;
     private StatusInfoSnapshot status;
@@ -27,7 +27,7 @@ public class PublishLogSnapshot<T> {
         this.eventContent = publishLog.eventContent();
     }
 
-    public PublishLogSnapshot(String logId, SummarySnapshot summary, StatusInfoSnapshot status, T eventContent){
+    public PublishLogSnapshot(String logId, SummarySnapshot summary, StatusInfoSnapshot status, Object eventContent){
         this.logId = logId;
         this.summary = summary;
         this.status = status;
@@ -68,7 +68,17 @@ public class PublishLogSnapshot<T> {
         return eventContent;
     }
 
-    public void eventContent(T eventContent) {
+    public void eventContent(Object eventContent) {
         this.eventContent = eventContent;
+    }
+
+    @Override
+    public String toString() {
+        return "PublishLogSnapshot{" +
+                "logId='" + logId + '\'' +
+                ", summary=" + summary +
+                ", status=" + status +
+                ", eventContent=" + eventContent +
+                '}';
     }
 }

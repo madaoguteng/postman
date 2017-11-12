@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -48,7 +49,7 @@ public class PostmanPublisherImpl implements PostmanPublisher {
     public void publish(String eventName, Object content, String publisher, Integer publishMaxNumber, String returnEventName) {
         PublishLog log = new PublishLog(eventName, null, publishMaxNumber, publisher);
         //将数据序列化成待发送的消息体
-        String eventContext = eventSerialize.serialize(log.logId().id(), publisher, log.summary().publishTime(),
+        Serializable eventContext = eventSerialize.serialize(log.logId().id(), publisher, log.summary().publishTime(),
                 content, returnEventName);
         log.setEventContent(eventContext);
         PublishLogSnapshot snapshot = new PublishLogSnapshot(log);

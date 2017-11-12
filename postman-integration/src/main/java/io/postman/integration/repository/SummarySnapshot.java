@@ -62,5 +62,14 @@ public class SummarySnapshot {
         return publisher;
     }
 
+    @Override
+    public String toString() {
+        return "SummarySnapshot{" +
+                "eventName='" + eventName + '\'' +
+                ", publishTime=" + publishTime +
+                ", publishMaxNumber=" + publishMaxNumber +
+                ", publisher='" + publisher + '\'' +
+                '}';
+    }
 }
 

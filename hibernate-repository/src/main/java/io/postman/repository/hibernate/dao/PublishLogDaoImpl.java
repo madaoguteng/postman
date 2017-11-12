@@ -11,6 +11,7 @@ import io.postman.integration.repository.SummarySnapshot;
 import io.postman.repository.hibernate.model.PublishLogPO;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.TemporalType;
 import java.io.Serializable;
@@ -22,6 +23,7 @@ import java.util.List;
  */
 @Repository
 public class PublishLogDaoImpl extends CommonDaoImpl<PublishLogPO> implements PublisherRepository {
+    @Transactional
     @Override
     public Serializable save(PublishLogSnapshot log) {
         return super.save(snapshotToPO(log));
