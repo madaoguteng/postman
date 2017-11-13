@@ -11,13 +11,14 @@ public interface Publisher {
      * @param value 消息内容
      * @param callback
      */
-    <K,V> void sendNIO(String msgName, K routingKey, V value, Callback callback);
+    void sendNIO(String msgName, Object routingKey, Object value, Callback callback);
 
     /**
      * 阻塞方式发送消息
      * @param msgName 消息名称
      * @param routingKey 路由key
      * @param value 消息内容
+     * @return topicPartition and offset信息
      */
-    <K,V> void sendBIO(String msgName, K routingKey, V value);
+    String sendBIO(String msgName, Object routingKey, Object value);
 }

@@ -3,6 +3,7 @@ package io.postman.repository.hibernate.dao;
 import com.alibaba.fastjson.JSON;
 import io.postman.common.exception.RepositoryException;
 import io.postman.common.util.StringUtil;
+import io.postman.integration.domain.model.publisher.PublishLog;
 import io.postman.integration.domain.model.publisher.PublishStatus;
 import io.postman.integration.repository.PublishLogSnapshot;
 import io.postman.integration.repository.PublisherRepository;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.TemporalType;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,8 +24,9 @@ import java.util.List;
  * Created by caojun on 2017/11/9.
  */
 @Repository
+//@Transactional
 public class PublishLogDaoImpl extends CommonDaoImpl<PublishLogPO> implements PublisherRepository {
-    @Transactional
+
     @Override
     public Serializable save(PublishLogSnapshot log) {
         return super.save(snapshotToPO(log));
@@ -67,16 +70,26 @@ public class PublishLogDaoImpl extends CommonDaoImpl<PublishLogPO> implements Pu
 
     @Override
     public PublishLogSnapshot publishLog(String logId) {
-        return poToSnapshot(super.get(logId));
+        PublishLogPO po = super.get(logId);
+        if (po != null)
+            return poToSnapshot(po);
+        else
+            return null;
     }
 
     @Override
     public List<PublishLogSnapshot> listOfFail(Integer pageSize, Integer pageNo) {
-        return getSession().createQuery("from PublishLogPO where status=:status order by publishTime desc")
+        List<PublishLogPO> pos = getSession().createQuery("from PublishLogPO where status=:status order by publishTime desc")
                 .setParameter("status", PublishStatus.FAIL.toString())
                 .setFirstResult((pageNo - 1) * pageSize)
                 .setMaxResults(pageSize)
                 .getResultList();
+        if (pos != null && pos.size()>0){
+            List<PublishLogSnapshot> snapshots = new ArrayList<>();
+            pos.forEach(po -> snapshots.add(poToSnapshot(po)));
+            return snapshots;
+        }else
+            return null;
     }
 
     private PublishLogPO snapshotToPO(PublishLogSnapshot snapshot){

@@ -68,7 +68,6 @@ public class PostmanPublisherImpl implements PostmanPublisher {
                     publisherRepository.updateStatus(snapshot.logId(), new StatusInfoSnapshot(log.status()));
                 }
         );
-
     }
 
     @Transactional
