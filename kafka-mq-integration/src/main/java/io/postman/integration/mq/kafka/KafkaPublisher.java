@@ -6,6 +6,7 @@ import io.postman.common.util.StringUtil;
 import io.postman.integration.Callback;
 import io.postman.integration.Publisher;
 import org.apache.kafka.clients.producer.*;
+import org.springframework.stereotype.Service;
 
 import java.util.Properties;
 import java.util.concurrent.Future;
@@ -13,6 +14,7 @@ import java.util.concurrent.Future;
 /**
  * Created by caojun on 2017/11/13.
  */
+@Service("kafkaPublisher")
 public class KafkaPublisher implements Publisher {
 
     private Producer<Object, Object> producer;
